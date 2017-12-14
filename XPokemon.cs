@@ -17,10 +17,7 @@ namespace miniPokemon
         };
 
         private int level = 1;
-        private bool isKO;
-        private int life;
         private int damage;
-        private XPoketype poketype;
         private int speed;
         private int defense;
         private int attack;
@@ -36,11 +33,11 @@ namespace miniPokemon
         public XPokemon(string name, int life, int damage, XPoketype poketype)
         : base(name)
         {
-            this.life = life;
+            this.Life = life;
             this.damage = damage;
-            this.poketype = poketype;
+            this.Poketype = poketype;
 
-            isKO = life <= 0;
+            IsKO = life <= 0;
         }
 
         #endregion Constructor
@@ -52,10 +49,10 @@ namespace miniPokemon
         {
             Console.WriteLine("--- {0} ---", Name);
             Console.WriteLine("\tCurrent HP:");
-            Console.WriteLine("\tMax HP: {0}", life);
-            Console.WriteLine("\tAlive: {0}", isKO);
+            Console.WriteLine("\tMax HP: {0}", Life);
+            Console.WriteLine("\tAlive: {0}", IsKO);
             Console.WriteLine("\tDamage: {0}", damage);
-            Console.WriteLine("\tType: {0}", poketype);
+            Console.WriteLine("\tType: {0}", Poketype);
             Console.WriteLine();
         }
         
@@ -64,43 +61,32 @@ namespace miniPokemon
             ++level;
         }
 
-        public int Attack()
-        {
-            return damage;
-        }
-
         public void GetHurt(int damage)
         {
-            if ((life -= damage) < 0)
+            if ((Life -= damage) < 0)
             {
-                life = 0;
+                Life = 0;
             }
-            isKO = life <= 0;
+            IsKO = Life <= 0;
         }
 
         public void Heal(int life)
         {
-            this.life += life;
-            isKO = life <= 0;
+            this.Life += life;
+            IsKO = life <= 0;
         }
 
-        public int Life
-        {
-            get { return life; }
-            set { life = value; }
-        }
+        public int Life { get; set; }
+
+        public bool IsKO { get; set; }
+
+        public XPoketype Poketype { get; set; }
         
-        public bool IsKO
-        {
-            get { return isKO; }
-            set { isKO = value; }
-        }
-
-        public XPoketype Poketype
-        {
-            get { return poketype;  }
-            set { poketype = value; }
-        }
+        public int Attack { get; set; }
+        
+        public int Defense { get; set; }
+        
+        public int Speed { get; set; }
 
         #endregion Methods
     }
