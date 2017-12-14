@@ -1,10 +1,6 @@
-﻿using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http;
 using System;
-using System.Runtime.Remoting.Metadata;
 using System.Threading.Tasks;
-using System.Runtime.Serialization;
 using LitJson;
 
 namespace miniPokemon
@@ -67,6 +63,13 @@ namespace miniPokemon
             pk.Life = int.Parse(hp);
 
             string speed = api_data["stats"][(int) API_STATS.SPEED]["base_stat"].ToString();
+            pk.Speed = int.Parse(speed);
+
+            string attack = api_data["stats"][(int) API_STATS.ATK]["base_stat"].ToString();
+            pk.Attack = int.Parse(attack);
+
+            string defense = api_data["stats"][(int) API_STATS.DEF]["base_stat"].ToString();
+            pk.Defense = int.Parse(defense);
             
             
             /* HARDCODED: Get the pokemon's first type. */
