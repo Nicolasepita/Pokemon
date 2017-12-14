@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading;
 using Pokemon;
 
-namespace miniPokemon.Pokemon_game
+namespace Pokemon
 {
     public class Server
     {
-        private List<Clientsocket> SocketClients;
+        private List<Clientsocket> SocketClients = new List<Clientsocket>();
         private Socket SocketServer;
         private IPAddress IP;
         private int port;
@@ -22,7 +22,11 @@ namespace miniPokemon.Pokemon_game
             this.port = port;
         }
 
-        public List<Clientsocket> SocketClients1 => SocketClients;
+        public List<Clientsocket> SocketClients1
+        {
+            get => SocketClients;
+            set => SocketClients = value;
+        }
 
         public IPAddress Ip => IP;
 
@@ -41,7 +45,8 @@ namespace miniPokemon.Pokemon_game
 
         private void connexionAcceptCallback(IAsyncResult asyncResult)
         {
-            Socket SocketClient = SocketServer.EndAccept(asyncResult);
+            Socket SocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            SocketClient = SocketServer.EndAccept(asyncResult);
             SocketClients.Add(new Clientsocket(SocketClient));
         }
         
