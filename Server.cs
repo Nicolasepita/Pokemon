@@ -4,17 +4,17 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Pokemon;
 
 namespace miniPokemon.Pokemon_game
 {
     public class Server
     {
-
-        private List<Socket> SocketClients;
+        private List<Clientsocket> SocketClients;
         private Socket SocketServer;
         private IPAddress IP;
         private int port;
-        private byte[] msg;
+        private bool isListening = false;
         
         public Server(string ip, int port)
         {
@@ -22,48 +22,27 @@ namespace miniPokemon.Pokemon_game
             this.port = port;
         }
 
+        public List<Clientsocket> SocketClients1 => SocketClients;
+
+        public IPAddress Ip => IP;
+
+        public int Port => port;
+
+        public bool IsListening => isListening;
+
         public void start()
         {
             SocketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            SocketServer.Bind(new IPEndPoint(IP, 65555));
+            SocketServer.Bind(new IPEndPoint(IP, port));
             SocketServer.Listen(3);
             SocketServer.BeginAccept(new AsyncCallback(this.connexionAcceptCallback), SocketServer);
+            isListening = true;
         }
 
         private void connexionAcceptCallback(IAsyncResult asyncResult)
         {
             Socket SocketClient = SocketServer.EndAccept(asyncResult);
-
-            while (SocketClient.Available == 0)
-            {
-                Thread.Sleep(3000);
-                Console.WriteLine("Server: Client[0]: waiting for message...");
-            }
-            
-            this.msg = new byte[SocketClient.Available];
-            SocketClient.BeginReceive(msg, 0, msg.Length, SocketFlags.None, new AsyncCallback(ReceiveCallback), SocketClient);
-            
-            SocketClients.Add(SocketClient);
-        }
-
-
-        private void ReceiveCallback(IAsyncResult asyncResult)
-        {
-            string msg = Encoding.UTF8.GetString(this.msg);
-            
-            Console.WriteLine("Server: Client[0]: recived" + msg);
-            //Socket SocketClient = SocketClients[0];
-            //int read = SocketClient.EndReceive(asyncResult);
-        }
-        
-        
-        private void SendCallback(IAsyncResult asyncResult)
-        {
-            //rien a faire
-            
-            //Socket SocketClient = SocketClients[0];
-            //int send = SocketClient.EndSend(asyncResult);
-            Closeall();
+            SocketClients.Add(new Clientsocket(SocketClient));
         }
         
         private void Closeall()
