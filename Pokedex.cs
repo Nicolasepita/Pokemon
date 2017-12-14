@@ -1,9 +1,8 @@
-﻿using System.Net.Http;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using LitJson;
 
-namespace miniPokemon
+namespace Pokemon
 {
     public class Pokedex
     {

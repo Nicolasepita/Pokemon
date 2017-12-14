@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Collections.Generic;
 
-namespace miniPokemon
+namespace Pokemon
 {
     public class XPokemon : Animal
     {
