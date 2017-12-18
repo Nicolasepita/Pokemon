@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Threading;
+using Pokemon.Connexion;
 
 namespace Pokemon
 {
     internal class Program
     {
-        private static bool finish = false;
+        public static bool finish = false;
+        public static PartyManager pm;
+        public static PartyTimer pt;
+        public static ConsoleOut cons = new ConsoleOut();
         
         public static void Main(string[] args)
         {
-            try
+            /*try
             {
                 Server serv = new Server("127.0.0.1", 6555);
-                Connection co = new Connection("127.0.0.1", 6555);
+                Connexion.Connexion co = new Connexion.Connexion("127.0.0.1", 6555);
                 serv.start();
                 Console.WriteLine("server: start");
                 co.startClient();
@@ -40,7 +44,27 @@ namespace Pokemon
             {
                 Console.WriteLine(e);
             }
-            Thread.Sleep(100000);
+            Thread.Sleep(100000);*/
+            
+            
+            
+            
+            pm = new PartyManager();
+            pm.getConfig();
+            if (finish) return;
+            pt = new PartyTimer();
+            pt.Start();
+            
+        }
+
+        public static string ReadLine()
+        {
+            string s = "";
+            while (string.IsNullOrEmpty(s))
+            {
+                s = Console.ReadLine();
+            }
+            return s;
         }
     }
 }

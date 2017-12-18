@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using Pokemon;
 
-namespace Pokemon
+namespace Pokemon.Connexion
 {
     public class Server
     {
-        private List<Clientsocket> SocketClients = new List<Clientsocket>();
+        private List<Client> SocketClients = new List<Client>();
         private Socket SocketServer;
         private IPAddress IP;
         private int port;
@@ -22,7 +19,7 @@ namespace Pokemon
             this.port = port;
         }
 
-        public List<Clientsocket> SocketClients1
+        public List<Client> SocketClients1
         {
             get => SocketClients;
             set => SocketClients = value;
@@ -47,7 +44,7 @@ namespace Pokemon
         {
             Socket SocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             SocketClient = SocketServer.EndAccept(asyncResult);
-            SocketClients.Add(new Clientsocket(SocketClient));
+            SocketClients.Add(new Client(SocketClient));
         }
         
         private void Closeall()

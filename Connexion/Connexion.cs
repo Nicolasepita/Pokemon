@@ -1,12 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Pokemon
+namespace Pokemon.Connexion
 {
-    public class Connection
+    public class Connexion
     {
         private Socket SocketClient;
         private IPAddress IP;
@@ -15,7 +14,7 @@ namespace Pokemon
         private byte[] sendingbuf;
         private byte[] msg;
         
-        public Connection(string ip, int port)
+        public Connexion(string ip, int port)
         {
             IP = IPAddress.Parse(ip);
             this.port = port;

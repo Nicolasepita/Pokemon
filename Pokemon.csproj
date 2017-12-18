@@ -45,10 +45,12 @@
   <ItemGroup>
     <Compile Include="Animal.cs" />
     <Compile Include="Arena.cs" />
+    <Compile Include="Connexion\Client.cs" />
+    <Compile Include="Connexion\Connexion.cs" />
+    <Compile Include="Connexion\Server.cs" />
     <Compile Include="ConsoleOut.cs" />
     <Compile Include="Dresseur.cs" />
     <Compile Include="Fighter.cs" />
-    <Compile Include="Connection.cs" />
     <Compile Include="LitJson\IJsonWrapper.cs" />
     <Compile Include="LitJson\JsonData.cs" />
     <Compile Include="LitJson\JsonException.cs" />
@@ -58,13 +60,13 @@
     <Compile Include="LitJson\JsonWriter.cs" />
     <Compile Include="LitJson\Lexer.cs" />
     <Compile Include="LitJson\ParserToken.cs" />
+    <Compile Include="PartyManager.cs" />
+    <Compile Include="PartyTimer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Pokedex.cs" />
-    <Compile Include="Pokemons.cs" />
+    <Compile Include="Pokemon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="Clientsocket.cs" />
     <Compile Include="XPokemon.cs" />
   </ItemGroup>
   <ItemGroup>

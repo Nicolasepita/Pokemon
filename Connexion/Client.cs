@@ -2,9 +2,9 @@
 using System.Net.Sockets;
 using System.Text;
 
-namespace Pokemon
+namespace Pokemon.Connexion
 {
-    public class Clientsocket
+    public class Client
     {
         private string name = "name not define";
         private Socket SocketClient;
@@ -12,7 +12,7 @@ namespace Pokemon
         private byte[] sendingbuf;
         private byte[] msg;
         
-        public Clientsocket(Socket SocketClient)
+        public Client(Socket SocketClient)
         {
             this.SocketClient = SocketClient;
             isConnected = true;
