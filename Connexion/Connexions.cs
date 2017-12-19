@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Pokemon.Connexion
 {
-    public class Connexion
+    public class Connexions
     {
         private Socket SocketClient;
         private IPAddress IP;
@@ -14,9 +14,9 @@ namespace Pokemon.Connexion
         private byte[] sendingbuf;
         private byte[] msg;
         
-        public Connexion(string ip, int port)
+        public Connexions(IPAddress IP, int port)
         {
-            IP = IPAddress.Parse(ip);
+            this.IP = IP;
             this.port = port;
         }
 

@@ -12,10 +12,6 @@ namespace Pokemon
             
         }
         
-        
-        
-        
-        
         //delegating member
         
         public List<Pokemon> Pokemon => pokemons;

@@ -12,17 +12,12 @@ namespace Pokemon.Connexion
         private IPAddress IP;
         private int port;
         private bool isListening = false;
+        private List<Client> newclients = new List<Client>();
         
-        public Server(string ip, int port)
+        public Server(IPAddress IP, int port)
         {
-            IP = IPAddress.Parse(ip);
+            this.IP = IP;
             this.port = port;
-        }
-
-        public List<Client> SocketClients1
-        {
-            get => SocketClients;
-            set => SocketClients = value;
         }
 
         public IPAddress Ip => IP;
@@ -31,11 +26,25 @@ namespace Pokemon.Connexion
 
         public bool IsListening => isListening;
 
+        public List<Client> SocketClientslist => SocketClients;
+
+        public void AddSocketClients(Client item)
+        {
+            SocketClients.Add(item);
+        }
+
+        public bool RemoveSocketClients(Client item)
+        {
+            return SocketClients.Remove(item);
+        }
+
+
         public void start()
         {
             SocketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             SocketServer.Bind(new IPEndPoint(IP, port));
             SocketServer.Listen(3);
+            Console.WriteLine("Server start on " + IP + ":" + port);
             SocketServer.BeginAccept(new AsyncCallback(this.connexionAcceptCallback), SocketServer);
             isListening = true;
         }
@@ -44,7 +53,9 @@ namespace Pokemon.Connexion
         {
             Socket SocketClient = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             SocketClient = SocketServer.EndAccept(asyncResult);
-            SocketClients.Add(new Client(SocketClient));
+            Client c = new Client(SocketClient);
+            SocketClients.Add(c);
+            newclients.Add(c);
         }
         
         private void Closeall()
@@ -55,5 +66,19 @@ namespace Pokemon.Connexion
             }
             SocketServer.Close();
         }
+
+        public List<Client> Newclients => newclients;
+
+        public void ClearNewclients()
+        {
+            newclients.Clear();
+        }
+
+        public bool RemoveNewclients(Client item)
+        {
+            return newclients.Remove(item);
+        }
+
+        public int CountNewclients => newclients.Count;
     }
 }

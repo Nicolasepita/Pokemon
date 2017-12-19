@@ -44,10 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Animal.cs" />
-    <Compile Include="Arena.cs" />
     <Compile Include="Connexion\Client.cs" />
-    <Compile Include="Connexion\Connexion.cs" />
+    <Compile Include="Connexion\Connexions.cs" />
     <Compile Include="Connexion\Server.cs" />
+    <Compile Include="ConsoleInput.cs" />
     <Compile Include="ConsoleOut.cs" />
     <Compile Include="Dresseur.cs" />
     <Compile Include="Fighter.cs" />
@@ -60,8 +60,10 @@
     <Compile Include="LitJson\JsonWriter.cs" />
     <Compile Include="LitJson\Lexer.cs" />
     <Compile Include="LitJson\ParserToken.cs" />
-    <Compile Include="PartyManager.cs" />
+    <Compile Include="Party.cs" />
+    <Compile Include="PartyConfig.cs" />
     <Compile Include="PartyTimer.cs" />
+    <Compile Include="PartyWaiting.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Pokedex.cs" />
     <Compile Include="Pokemon.cs" />

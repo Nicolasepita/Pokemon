@@ -7,8 +7,7 @@ namespace Pokemon
     internal class Program
     {
         public static bool finish = false;
-        public static PartyManager pm;
-        public static PartyTimer pt;
+        public static Party party;
         public static ConsoleOut cons = new ConsoleOut();
         
         public static void Main(string[] args)
@@ -48,13 +47,10 @@ namespace Pokemon
             
             
             
-            
-            pm = new PartyManager();
-            pm.getConfig();
+            party = new Party();
+            PartyConfig pm = new PartyConfig(party);
+            PartyTimer pt = new PartyTimer(party);
             if (finish) return;
-            pt = new PartyTimer();
-            pt.Start();
-            
         }
 
         public static string ReadLine()

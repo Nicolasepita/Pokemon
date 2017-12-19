@@ -1,30 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 
 namespace Pokemon
 {
-    public class PartyManager
+    public class PartyConfig
     {
-        public enum GameType
+        private Party pa;
+
+        public PartyConfig(Party pa)
         {
-            Local,
-            Connected,
-            Server_Hosting
-        };
-        private GameType gametype = GameType.Local;
-        private IPAddress ip = IPAddress.Parse("*");
-        private int port = 45555;
-        private int slot = 2;
+            this.pa = pa;
+        }
         
-        private List<Player> players = new List<Player>();
-        
-        public void getConfig()
+        public void StartConfiguration(ConsoleInput ci)
         {
-            string ins = Program.ReadLine();
-            ins.ToLower();
-            while (ins != "stop" && ins != "start" && players.Count >= 2 && players.Count % 2 == 0)
+            string ins = "";
+            while (ins != "stop" && ins != "start" && pa.PlayersCount < 2 && pa.PlayersCount % 2 != 0)
             {
+                ins = ci.read_next_msg();
+                if (ins == "")
+                {
+                    Thread.Sleep(1000);
+                    return;
+                }
+                ins.ToLower();
                 string[] insp = ins.Split(' ');
                 switch (insp[0])
                 {
@@ -35,7 +36,7 @@ namespace Pokemon
                         }
                         else
                         {
-                            Console.WriteLine("GameType: " + gametype.GetType());
+                            Console.WriteLine("GameType: " + pa.Gametype.GetType());
                         }
                         break;
                     case "ip":
@@ -45,7 +46,7 @@ namespace Pokemon
                         }
                         else
                         {
-                            Console.WriteLine("IP: " + ip);
+                            Console.WriteLine("IP: " + pa.Ip);
                         }
                     break;
                     case "port":
@@ -55,13 +56,13 @@ namespace Pokemon
                         }
                         else
                         {
-                            Console.WriteLine("port: " + port);
+                            Console.WriteLine("port: " + pa.Port);
                         }
                     break;
                     case "add_local_player":
                         if (insp.Length > 1)
                         {
-                            players.Add(new Player(insp[1]));
+                            pa.AddPlayer(new Player(insp[1]));
                         }
                         else
                         {
@@ -80,7 +81,7 @@ namespace Pokemon
                     break;
                     case "players":
                         Console.WriteLine("Players list:");
-                        foreach (var p in players)
+                        foreach (var p in pa.getPlayers)
                         {
                             Console.WriteLine(p.Pseudo + "     " + p.Guid);
                         }
@@ -92,7 +93,7 @@ namespace Pokemon
                         }
                         else
                         {
-                            Console.WriteLine("nb_players: " + players.Count + "   total players: " + slot);
+                            Console.WriteLine("nb_players: " + pa.PlayersCount + "   total players: " + pa.Slot);
                         }
                     break;
                     case "start":
@@ -100,10 +101,10 @@ namespace Pokemon
                         Console.WriteLine("Use 'rest' to rest the parametre...");
                     break;
                     case "rest":
-                        gametype = GameType.Local;
-                        ip = IPAddress.Parse("*");
-                        port = 65555;
-                        players.Clear();
+                        pa.Gametype = Party.GameType.Local;
+                        pa.Ip = IPAddress.Parse("*");
+                        pa.Port = 65555;
+                        pa.ClearPlayers();
                         Console.WriteLine("Rest Sucess Full");
                     break;
                     default:
@@ -123,7 +124,7 @@ namespace Pokemon
         {
             try
             {
-                gametype = (GameType) int.Parse(s);
+                pa.Gametype = (Party.GameType) int.Parse(s);
             }
             catch (Exception e)
             {
@@ -132,13 +133,13 @@ namespace Pokemon
                     switch (s)
                     {
                         case "local":
-                            gametype = GameType.Local;
+                            pa.Gametype = Party.GameType.Local;
                             break;
                         case "connected":
-                            gametype = GameType.Connected;
+                            pa.Gametype = Party.GameType.Connected;
                             break;
                         case "server_hosting":
-                            gametype = GameType.Server_Hosting;
+                            pa.Gametype = Party.GameType.Server_Hosting;
                             break;
                         default:
                             throw new ArgumentException("nop");
@@ -153,13 +154,13 @@ namespace Pokemon
 
         private void setip(string s)
         {
-            if (Gametype == GameType.Local)
+            if (pa.Gametype == Party.GameType.Local)
             {
                 Console.WriteLine("you can't set IP in local mod");
             }
             try
             {
-                ip = IPAddress.Parse(s);
+                pa.Ip = IPAddress.Parse(s);
             }
             catch (Exception e)
             {
@@ -169,7 +170,7 @@ namespace Pokemon
 
         private void setport(string s)
         {
-            if (Gametype == GameType.Local)
+            if (pa.Gametype == Party.GameType.Local)
             {
                 Console.WriteLine("you can't set port in local mod");
             }
@@ -182,7 +183,7 @@ namespace Pokemon
                 }
                 else
                 {
-                    port = porttemp;
+                    pa.Port = porttemp;
                 }
             }
             catch (Exception e)
@@ -193,66 +194,81 @@ namespace Pokemon
 
         private void setnb_players(string s)
         {
-            try
+            if (pa.Gametype == Party.GameType.Server_Hosting)
             {
-                int nbtemp = int.Parse(s);
-                if (nbtemp % 2 != 0 || nbtemp < 2)
+                try
                 {
-                    Console.WriteLine("nb_players is a number who: nb % 2 == 0 and nb > 2");
+                    int nbtemp = int.Parse(s);
+                    if (nbtemp % 2 != 0 || nbtemp < 2)
+                    {
+                        Console.WriteLine("nb_players is a number who: nb % 2 == 0 and nb > 2");
+                    }
+                    else
+                    {
+                        pa.Slot = nbtemp;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    slot = nbtemp;
+                    Console.WriteLine(e.GetType() +
+                                      " nb_players: nb_players invalide =(      (nb_players is a number)");
                 }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e.GetType() + " nb_players: nb_players invalide =(      (nb_players is a number)");
+                Console.WriteLine("you must be in server mod to set nb_players");
             }
         }
 
         private void remove_players(string s)
         {
-            try
+            if (pa.Gametype == Party.GameType.Server_Hosting)
             {
-                Guid g = Guid.Parse(s);
-                //needed to avoid current modified exception
-                List<Player> player_to_remove = new List<Player>();
-                foreach (var p in players)
+                try
                 {
-                    if (p.Guid == g)
+                    Guid g = Guid.Parse(s);
+                    //needed to avoid current modified exception
+                    List<Player> player_to_remove = new List<Player>();
+                    foreach (var p in pa.getPlayers)
                     {
-                        player_to_remove.Remove(p);
+                        if (p.Guid == g)
+                        {
+                            player_to_remove.Remove(p);
+                        }
+                    }
+                    foreach (var p in player_to_remove)
+                    {
+                        bool r = pa.RemovePlayer(p);
+                        if (r)
+                        {
+                            Console.WriteLine("Sucessfully remove: " + p.Pseudo + "   " + p.Guid);
+                        }
                     }
                 }
-                foreach (var p in player_to_remove)
+                catch (Exception e)
                 {
-                    bool r = players.Remove(p);
-                    if (r)
+                    //needed to avoid current modified exception
+                    List<Player> player_to_remove = new List<Player>();
+                    foreach (var p in pa.getPlayers)
                     {
-                        Console.WriteLine("Sucessfully remove: " + p.Pseudo + "   " + p.Guid);
+                        if (p.Pseudo == s)
+                        {
+                            player_to_remove.Remove(p);
+                        }
+                    }
+                    foreach (var p in player_to_remove)
+                    {
+                        bool r = pa.RemovePlayer(p);
+                        if (r)
+                        {
+                            Console.WriteLine("Sucessfully remove: " + p.Pseudo);
+                        }
                     }
                 }
             }
-            catch (Exception e)
+            else
             {
-                //needed to avoid current modified exception
-                List<Player> player_to_remove = new List<Player>();
-                foreach (var p in players)
-                {
-                    if (p.Pseudo == s)
-                    {
-                        player_to_remove.Remove(p);
-                    }
-                }
-                foreach (var p in player_to_remove)
-                {
-                    bool r = players.Remove(p);
-                    if (r)
-                    {
-                        Console.WriteLine("Sucessfully remove: " + p.Pseudo);
-                    }
-                }
+                Console.WriteLine("you must be in server mod to remove a player");
             }
         }
 
@@ -279,39 +295,5 @@ namespace Pokemon
                 Console.WriteLine(l);
             }
         }
-        
-        //delegating member
-
-        public GameType Gametype => gametype;
-
-        public IPAddress Ip => ip;
-
-        public int Port => port;
-
-        public int Slot => slot;
-        
-        public List<Player> getPlayers => players;
-
-        public void AddPlayer(Player item)
-        {
-            players.Add(item);
-        }
-
-        public void ClearPlayers()
-        {
-            players.Clear();
-        }
-
-        public bool ContainsPlayer(Player item)
-        {
-            return players.Contains(item);
-        }
-
-        public bool RemovePlayer(Player item)
-        {
-            return players.Remove(item);
-        }
-
-        public int PlayersCount => players.Count;
     }
 }

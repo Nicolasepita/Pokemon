@@ -6,7 +6,6 @@ namespace Pokemon.Connexion
 {
     public class Client
     {
-        private string name = "name not define";
         private Socket SocketClient;
         private bool isConnected = false;
         private byte[] sendingbuf;
@@ -19,12 +18,6 @@ namespace Pokemon.Connexion
         }
 
         public bool IsConnected => isConnected;
-
-        public string Name
-        {
-            get => name;
-            set => name = value;
-        }
 
         public void sendMessage(string s)
         {

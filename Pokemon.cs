@@ -11,7 +11,6 @@ namespace Pokemon
             GRASS,
             ELECTRICK
         };
-
         
         private Poketype poketype;
 
