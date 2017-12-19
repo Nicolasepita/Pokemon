@@ -51,6 +51,8 @@
     <Compile Include="ConsoleOut.cs" />
     <Compile Include="Dresseur.cs" />
     <Compile Include="Fighter.cs" />
+    <Compile Include="GameClient.cs" />
+    <Compile Include="Gameserver.cs" />
     <Compile Include="LitJson\IJsonWrapper.cs" />
     <Compile Include="LitJson\JsonData.cs" />
     <Compile Include="LitJson\JsonException.cs" />

@@ -7,13 +7,12 @@ namespace Pokemon
     {
         public enum GameType
         {
-            Local,
             Connected,
             Server_Hosting
         };
         
-        protected GameType gametype = GameType.Local;
-        protected IPAddress ip = IPAddress.Parse("*");
+        protected GameType gametype = GameType.Server_Hosting;
+        protected IPAddress ip = IPAddress.Parse("127.0.0.1");
         protected int port = 45555;
         protected int slot = 2;
         

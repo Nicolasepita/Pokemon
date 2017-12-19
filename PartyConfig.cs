@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using Pokemon.Connexion;
 
 namespace Pokemon
 {
@@ -62,7 +63,7 @@ namespace Pokemon
                     case "add_local_player":
                         if (insp.Length > 1)
                         {
-                            pa.AddPlayer(new Player(insp[1]));
+                            pa.AddPlayer(new Player(insp[1], new Connexions(IPAddress.Parse("127.0.0.1"), pa.Port)));
                         }
                         else
                         {
@@ -101,8 +102,8 @@ namespace Pokemon
                         Console.WriteLine("Use 'rest' to rest the parametre...");
                     break;
                     case "rest":
-                        pa.Gametype = Party.GameType.Local;
-                        pa.Ip = IPAddress.Parse("*");
+                        pa.Gametype = Party.GameType.Server_Hosting;
+                        pa.Ip = IPAddress.Parse("127.0.0.1");
                         pa.Port = 65555;
                         pa.ClearPlayers();
                         Console.WriteLine("Rest Sucess Full");
@@ -132,9 +133,6 @@ namespace Pokemon
                 {
                     switch (s)
                     {
-                        case "local":
-                            pa.Gametype = Party.GameType.Local;
-                            break;
                         case "connected":
                             pa.Gametype = Party.GameType.Connected;
                             break;
@@ -142,7 +140,7 @@ namespace Pokemon
                             pa.Gametype = Party.GameType.Server_Hosting;
                             break;
                         default:
-                            throw new ArgumentException("nop");
+                            throw new Exception();
                     }
                 }
                 catch (Exception e2)
@@ -154,10 +152,6 @@ namespace Pokemon
 
         private void setip(string s)
         {
-            if (pa.Gametype == Party.GameType.Local)
-            {
-                Console.WriteLine("you can't set IP in local mod");
-            }
             try
             {
                 pa.Ip = IPAddress.Parse(s);
@@ -170,10 +164,6 @@ namespace Pokemon
 
         private void setport(string s)
         {
-            if (pa.Gametype == Party.GameType.Local)
-            {
-                Console.WriteLine("you can't set port in local mod");
-            }
             try
             {
                 int porttemp = int.Parse(s);

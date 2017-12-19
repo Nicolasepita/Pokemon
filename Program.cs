@@ -47,6 +47,10 @@ namespace Pokemon
             
             
             
+            
+            
+            
+            
             party = new Party();
             PartyConfig pm = new PartyConfig(party);
             PartyTimer pt = new PartyTimer(party);

@@ -88,12 +88,7 @@ namespace Pokemon
         
         public void StartWaiting()
         {
-            p = Phase.Waiting;
-            if (pa.Gametype == Party.GameType.Local)
-            {
-                
-            }
-            else if(pa.Gametype == Party.GameType.Connected)
+            p = Phase.Waiting;if(pa.Gametype == Party.GameType.Connected)
             {
                 
             }
@@ -134,25 +129,5 @@ namespace Pokemon
         }
 
         public Phase P => p;
-
-        public void sendMessgae(string msg)
-        {
-            Console.WriteLine(msg);
-            if (pa.Gametype != Party.GameType.Local)
-            {
-                foreach (var p in pa.getPlayers)
-                {
-                    if (pa.Gametype == Party.GameType.Server_Hosting)
-                    {
-                        p.Co.sendMessage("Display:");
-                        p.Co.sendMessage(msg);   
-                    }else if (pa.Gametype == Party.GameType.Connected)
-                    {
-                        p.Connexion.sendMessage("Display:");
-                        p.Connexion.sendMessage(msg);   
-                    }
-                }   
-            }
-        }
     }
 }
