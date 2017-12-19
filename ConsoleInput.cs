@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Pokemon
@@ -9,7 +10,18 @@ namespace Pokemon
 
         public void Start_input_reading()
         {
-            msgs.Add(Program.ReadLine());
+            string s = "";
+            while (string.IsNullOrEmpty(s))
+            {
+                s = Console.ReadLine();
+            }
+            s.ToLower();
+            if (s == "stop")
+            {
+                Program.finish = true;
+                return;
+            }
+            msgs.Add(s);
         }
 
         public string read_next_msg()

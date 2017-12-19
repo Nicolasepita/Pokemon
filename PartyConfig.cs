@@ -18,15 +18,13 @@ namespace Pokemon
         public void StartConfiguration(ConsoleInput ci)
         {
             string ins = "";
-            while (ins != "stop" && ins != "start" && pa.PlayersCount < 2 && pa.PlayersCount % 2 != 0)
+            while (ins != "start" && pa.PlayersCount < 2 && pa.PlayersCount % 2 != 0)
             {
                 ins = ci.read_next_msg();
                 if (ins == "")
                 {
                     Thread.Sleep(1000);
-                    return;
                 }
-                ins.ToLower();
                 string[] insp = ins.Split(' ');
                 switch (insp[0])
                 {
@@ -60,33 +58,6 @@ namespace Pokemon
                             Console.WriteLine("port: " + pa.Port);
                         }
                     break;
-                    case "add_local_player":
-                        if (insp.Length > 1)
-                        {
-                            pa.AddPlayer(new Player(insp[1], new Connexions(IPAddress.Parse("127.0.0.1"), pa.Port)));
-                        }
-                        else
-                        {
-                            Console.WriteLine("can't add player: ''");
-                        }
-                    break;
-                    case "remove_player":
-                        if (insp.Length > 1)
-                        {    
-                           remove_players(insp[1]);
-                        }
-                        else
-                        {
-                            Console.WriteLine("can't remove player: ''");
-                        }
-                    break;
-                    case "players":
-                        Console.WriteLine("Players list:");
-                        foreach (var p in pa.getPlayers)
-                        {
-                            Console.WriteLine(p.Pseudo + "     " + p.Guid);
-                        }
-                    break;
                     case "nb_players":
                         if (insp.Length > 1)
                         {
@@ -98,6 +69,7 @@ namespace Pokemon
                         }
                     break;
                     case "start":
+                        return;
                         Console.WriteLine("It seems that some parametre are invalides");
                         Console.WriteLine("Use 'rest' to rest the parametre...");
                     break;
@@ -109,7 +81,7 @@ namespace Pokemon
                         Console.WriteLine("Rest Sucess Full");
                     break;
                     default:
-                        Console.WriteLine("Sorry, it is unlisabel");
+                        Console.WriteLine("Sorry, it is not legible");
                         help();
                     break;
                 }
@@ -209,59 +181,7 @@ namespace Pokemon
                 Console.WriteLine("you must be in server mod to set nb_players");
             }
         }
-
-        private void remove_players(string s)
-        {
-            if (pa.Gametype == Party.GameType.Server_Hosting)
-            {
-                try
-                {
-                    Guid g = Guid.Parse(s);
-                    //needed to avoid current modified exception
-                    List<Player> player_to_remove = new List<Player>();
-                    foreach (var p in pa.getPlayers)
-                    {
-                        if (p.Guid == g)
-                        {
-                            player_to_remove.Remove(p);
-                        }
-                    }
-                    foreach (var p in player_to_remove)
-                    {
-                        bool r = pa.RemovePlayer(p);
-                        if (r)
-                        {
-                            Console.WriteLine("Sucessfully remove: " + p.Pseudo + "   " + p.Guid);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    //needed to avoid current modified exception
-                    List<Player> player_to_remove = new List<Player>();
-                    foreach (var p in pa.getPlayers)
-                    {
-                        if (p.Pseudo == s)
-                        {
-                            player_to_remove.Remove(p);
-                        }
-                    }
-                    foreach (var p in player_to_remove)
-                    {
-                        bool r = pa.RemovePlayer(p);
-                        if (r)
-                        {
-                            Console.WriteLine("Sucessfully remove: " + p.Pseudo);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("you must be in server mod to remove a player");
-            }
-        }
-
+        
         private void help()
         {
             string[] text =

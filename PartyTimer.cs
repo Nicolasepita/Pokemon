@@ -9,7 +9,7 @@ namespace Pokemon
         public enum Phase
         {
             Creating,
-            Connecting,
+            Connection,
             Waiting,
             Playing,
         }
@@ -38,11 +38,7 @@ namespace Pokemon
 
         public void StartConnection()
         {
-            p = Phase.Connecting;
-            if (pa.Gametype == Party.GameType.Local)
-            {
-                return;
-            }
+            p = Phase.Connection;
             if (pa.Gametype == Party.GameType.Connected)
             {
                 co = new Connexion.Connexions(pa.Ip, pa.Port);
@@ -68,7 +64,7 @@ namespace Pokemon
                         {
                             Player p = new Player(sock);
                             pa.AddPlayer(p);
-                            Console.WriteLine("New player: " + p.Pseudo + "    (" + pa.PlayersCount+ "/" + pa.Slot + ")");
+                            Console.WriteLine("  New player: " + p.Pseudo + "    (" + pa.PlayersCount+ "/" + pa.Slot + ")");
                             Console.Write("Waiting for players...");
                         }
                         else

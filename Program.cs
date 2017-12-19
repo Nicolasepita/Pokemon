@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using Pokemon.Connexion;
 
 namespace Pokemon
 {
@@ -52,19 +50,12 @@ namespace Pokemon
             
             
             party = new Party();
-            PartyConfig pm = new PartyConfig(party);
             PartyTimer pt = new PartyTimer(party);
+            pt.StartCreating();
             if (finish) return;
-        }
-
-        public static string ReadLine()
-        {
-            string s = "";
-            while (string.IsNullOrEmpty(s))
-            {
-                s = Console.ReadLine();
-            }
-            return s;
+            pt.StartConnection();
+            pt.StartWaiting();
+            pt.StartPlaying();
         }
     }
 }

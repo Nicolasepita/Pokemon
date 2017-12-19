@@ -20,26 +20,26 @@ namespace Pokemon
         private const string WIKI_URL = "http://pokeapi.co/api/v2/pokemon/";
         private const string API_404 = "{\"detail\":\"Not found.\"}";
 
-        private static XPokemon.XPoketype StrToType(string s)
+        private static Pokemon.Poketype StrToType(string s)
         {
             switch (s)
             {
                 case "POISIN":
-                    return XPokemon.XPoketype.FIRE;
+                    return Pokemon.Poketype.FIRE;
                 case "FIRE":
-                    return XPokemon.XPoketype.FIRE;
+                    return Pokemon.Poketype.FIRE;
                 case "WATER":
-                    return XPokemon.XPoketype.WATER;
+                    return Pokemon.Poketype.WATER;
                 case "GRASS":
-                    return XPokemon.XPoketype.GRASS;
+                    return Pokemon.Poketype.GRASS;
                 case "ELECTRIC":
-                    return XPokemon.XPoketype.ELECTRIC;
+                    return Pokemon.Poketype.ELECTRIC;
                 default:
-                    return XPokemon.XPoketype.OTHER;
+                    return Pokemon.Poketype.OTHER;
             }
         }
         
-        public async Task GetPokemon(string name, XPokemon pk)
+        public async Task GetPokemon(string name, Pokemon pk)
         {
             HttpClient hc = new HttpClient();
             Console.WriteLine("Querying {0}'s info...", name);
@@ -57,7 +57,7 @@ namespace Pokemon
             JsonData api_data = JsonMapper.ToObject(responseString);
             
             /* Rename the pokemon (name defaults to "not found". */
-            pk.Rename(api_data["name"].ToString());
+            pk.Name = (api_data["name"].ToString());
 
             string hp = api_data["stats"][(int) API_STATS.HP]["base_stat"].ToString();
             pk.Life = int.Parse(hp);
@@ -69,14 +69,12 @@ namespace Pokemon
             pk.Attack = int.Parse(attack);
 
             string defense = api_data["stats"][(int) API_STATS.DEF]["base_stat"].ToString();
-            pk.Defense = int.Parse(defense);
+            pk.Life = int.Parse(defense);
             
             
             /* HARDCODED: Get the pokemon's first type. */
             string type = api_data["types"][0]["type"]["name"].ToString().ToUpper();
-            pk.Poketype = StrToType(type);
-            
-            return;
+            pk.Poketype_ = StrToType(type);
         }
     }
 }

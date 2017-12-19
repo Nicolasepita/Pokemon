@@ -7,7 +7,7 @@ namespace Pokemon
         private List<Pokemon> pokemons = new List<Pokemon>();
         
         
-        public Dresseur(string name, int life, int damage) : base(name, life, damage)
+        public Dresseur(string name, int attack, int life, int defence, int speed, int level=0) : base(name, attack, life, defence, speed, level)
         {
             
         }
